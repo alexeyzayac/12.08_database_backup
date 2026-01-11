@@ -85,3 +85,23 @@ PATH=/usr/bin:/bin
 3.1.* В каких случаях использование реплики будет давать преимущество по сравнению с обычным резервным копированием?
 
 *Приведите ответ в свободной форме.*
+
+#### Решение:
+
+Вначале необходимо включить binlog:
+
+````sql
+[mysqld]
+log_bin
+````
+
+Потмо необходимо создать полный бэкап:
+
+````bash
+mysqldump -u user -p --single-transaction --master-data=2 my_db > /backup/my_db_backup.sql
+````
+
+Потом выполняем инкрементный бэкап:
+````bash
+mysqlbinlog /var/lib/mysql/mysql-bin.0XXXXX > /backup/my_db_backup_inc.sql
+````
